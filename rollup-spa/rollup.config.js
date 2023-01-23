@@ -4,9 +4,9 @@ import resolve from '@rollup/plugin-node-resolve';
 import serve from 'rollup-plugin-serve';
 import injectProcessEnv from 'rollup-plugin-inject-process-env';
 import federation from '@module-federation/rollup-federation';
+import copy from 'rollup-plugin-copy'
 
-import pkg from './package.json';
-
+import pkg from './package.json' assert {type: 'json'};
 
 
 export default {
@@ -17,12 +17,22 @@ export default {
     injectProcessEnv({
       NODE_ENV: 'production',
     }),
+    copy({
+      targets: [
+        {src: ['../node_modules/react/umd/react.development.js',
+            '../node_modules/react/umd/react.production.min.js',
+            '../node_modules/react-dom/umd/react-dom.development.js',
+            '../node_modules/react-dom/umd/react-dom.production.min.js',],
+          dest: 'vendor'
+        }
+      ]
+    }),
     resolve({
       browser: true,
       transformMixedEsModules: true,
       modulesOnly: true,
       dedupe: ['react', 'react-dom'],
-      modulePaths: ['../'],
+      modulePaths: ['../node_modules'],
       extensions: ['.mjs', '.js', '.jsx', '.json'],
       preferBuiltins: false,
     }),
@@ -56,5 +66,5 @@ export default {
       },
     }),
   ],
-  output: [{ format: 'system', dir: pkg.main }],
+  output: [{format: 'system', dir: pkg.main}],
 };
