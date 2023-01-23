@@ -3,9 +3,9 @@ System.register(['react', 'react-dom'], (function (exports, module) {
     var React, ReactDOM;
     return {
         setters: [function (module) {
-            React = module["default"];
+            React = module.default;
         }, function (module) {
-            ReactDOM = module["default"];
+            ReactDOM = module.default;
         }],
         execute: (function () {
 
